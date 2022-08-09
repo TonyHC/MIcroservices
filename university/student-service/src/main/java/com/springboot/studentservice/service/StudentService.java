@@ -1,6 +1,7 @@
 package com.springboot.studentservice.service;
 
 import com.springboot.studentservice.entity.Student;
+import com.springboot.studentservice.feignclients.AddressFeignClient;
 import com.springboot.studentservice.repository.StudentRepository;
 import com.springboot.studentservice.request.CreateStudentRequest;
 import com.springboot.studentservice.response.AddressResponse;
@@ -13,10 +14,13 @@ import reactor.core.publisher.Mono;
 public class StudentService {
     private final StudentRepository studentRepository;
     private final AddressWebClient addressWebClient;
+    private final AddressFeignClient addressFeignClient;
 
-    public StudentService(StudentRepository studentRepository, AddressWebClient addressWebClient) {
+    public StudentService(StudentRepository studentRepository, AddressWebClient addressWebClient,
+                          AddressFeignClient addressFeignClient) {
         this.studentRepository = studentRepository;
         this.addressWebClient = addressWebClient;
+        this.addressFeignClient = addressFeignClient;
     }
 
     public StudentResponse createStudent(CreateStudentRequest createStudentRequest) {
@@ -29,16 +33,19 @@ public class StudentService {
         studentRepository.save(student);
 
         StudentResponse studentResponse = new StudentResponse(student);
-        studentResponse.setAddressResponse(getAddressById(student.getAddressId()));
+
+        // studentResponse.setAddressResponse(getAddressById(student.getAddressId()));
+        studentResponse.setAddressResponse(addressFeignClient.getAddressById(student.getAddressId()));
 
         return studentResponse;
     }
 
     public StudentResponse getStudentById(Long id) {
         Student student = studentRepository.findById(id).get();
-
         StudentResponse studentResponse = new StudentResponse(student);
-        studentResponse.setAddressResponse(getAddressById(student.getAddressId()));
+
+        // studentResponse.setAddressResponse(getAddressById(student.getAddressId()));
+        studentResponse.setAddressResponse(addressFeignClient.getAddressById(student.getAddressId()));
 
         return studentResponse;
     }

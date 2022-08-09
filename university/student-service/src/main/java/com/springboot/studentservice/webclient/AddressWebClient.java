@@ -10,8 +10,11 @@ public class AddressWebClient {
     @Value("${address.service.url}")
     private String addressServiceUrl;
 
+    @Value("${address.service.path}")
+    private String addressServicePath;
+
     @Bean
     public WebClient webClient() {
-        return WebClient.builder().baseUrl(addressServiceUrl).build();
+        return WebClient.builder().baseUrl(addressServiceUrl + addressServicePath).build();
     }
 }
