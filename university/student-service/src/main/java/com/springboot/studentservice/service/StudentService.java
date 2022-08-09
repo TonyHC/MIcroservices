@@ -1,7 +1,7 @@
 package com.springboot.studentservice.service;
 
 import com.springboot.studentservice.entity.Student;
-import com.springboot.studentservice.feignclients.AddressFeignClient;
+import com.springboot.studentservice.feignclients.OpenFeignClient;
 import com.springboot.studentservice.repository.StudentRepository;
 import com.springboot.studentservice.request.CreateStudentRequest;
 import com.springboot.studentservice.response.AddressResponse;
@@ -14,13 +14,13 @@ import reactor.core.publisher.Mono;
 public class StudentService {
     private final StudentRepository studentRepository;
     private final AddressWebClient addressWebClient;
-    private final AddressFeignClient addressFeignClient;
+    private final OpenFeignClient openFeignClient;
 
     public StudentService(StudentRepository studentRepository, AddressWebClient addressWebClient,
-                          AddressFeignClient addressFeignClient) {
+                          OpenFeignClient openFeignClient) {
         this.studentRepository = studentRepository;
         this.addressWebClient = addressWebClient;
-        this.addressFeignClient = addressFeignClient;
+        this.openFeignClient = openFeignClient;
     }
 
     public StudentResponse createStudent(CreateStudentRequest createStudentRequest) {
@@ -35,7 +35,7 @@ public class StudentService {
         StudentResponse studentResponse = new StudentResponse(student);
 
         // studentResponse.setAddressResponse(getAddressById(student.getAddressId()));
-        studentResponse.setAddressResponse(addressFeignClient.getAddressById(student.getAddressId()));
+        studentResponse.setAddressResponse(openFeignClient.getAddressById(student.getAddressId()));
 
         return studentResponse;
     }
@@ -45,7 +45,7 @@ public class StudentService {
         StudentResponse studentResponse = new StudentResponse(student);
 
         // studentResponse.setAddressResponse(getAddressById(student.getAddressId()));
-        studentResponse.setAddressResponse(addressFeignClient.getAddressById(student.getAddressId()));
+        studentResponse.setAddressResponse(openFeignClient.getAddressById(student.getAddressId()));
 
         return studentResponse;
     }

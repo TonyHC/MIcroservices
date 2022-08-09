@@ -5,8 +5,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(value = "address-service", path = "${address.service.path}")
-public interface AddressFeignClient {
-    @GetMapping("/{id}")
+@FeignClient(value = "api-gateway")
+public interface OpenFeignClient {
+    @GetMapping("/address-service/api/addresses/{id}")
     public AddressResponse getAddressById(@PathVariable Long id);
 }
