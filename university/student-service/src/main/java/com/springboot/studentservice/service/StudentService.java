@@ -1,26 +1,19 @@
 package com.springboot.studentservice.service;
 
 import com.springboot.studentservice.entity.Student;
-import com.springboot.studentservice.feignclients.OpenFeignClient;
 import com.springboot.studentservice.repository.StudentRepository;
 import com.springboot.studentservice.request.CreateStudentRequest;
-import com.springboot.studentservice.response.AddressResponse;
 import com.springboot.studentservice.response.StudentResponse;
-import com.springboot.studentservice.webclient.AddressWebClient;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
 
 @Service
 public class StudentService {
     private final StudentRepository studentRepository;
-    private final AddressWebClient addressWebClient;
-    private final OpenFeignClient openFeignClient;
+    private final CircuitBreakerService circuitBreakerService;
 
-    public StudentService(StudentRepository studentRepository, AddressWebClient addressWebClient,
-                          OpenFeignClient openFeignClient) {
+    public StudentService(StudentRepository studentRepository, CircuitBreakerService circuitBreakerService) {
         this.studentRepository = studentRepository;
-        this.addressWebClient = addressWebClient;
-        this.openFeignClient = openFeignClient;
+        this.circuitBreakerService = circuitBreakerService;
     }
 
     public StudentResponse createStudent(CreateStudentRequest createStudentRequest) {
@@ -34,8 +27,7 @@ public class StudentService {
 
         StudentResponse studentResponse = new StudentResponse(student);
 
-        // studentResponse.setAddressResponse(getAddressById(student.getAddressId()));
-        studentResponse.setAddressResponse(openFeignClient.getAddressById(student.getAddressId()));
+        studentResponse.setAddressResponse(circuitBreakerService.getAddressById(student.getAddressId()));
 
         return studentResponse;
     }
@@ -44,16 +36,8 @@ public class StudentService {
         Student student = studentRepository.findById(id).get();
         StudentResponse studentResponse = new StudentResponse(student);
 
-        // studentResponse.setAddressResponse(getAddressById(student.getAddressId()));
-        studentResponse.setAddressResponse(openFeignClient.getAddressById(student.getAddressId()));
+        studentResponse.setAddressResponse(circuitBreakerService.getAddressById(student.getAddressId()));
 
         return studentResponse;
-    }
-
-    private AddressResponse getAddressById(Long addressId) {
-        Mono<AddressResponse> addressResponse = addressWebClient.webClient().get().uri("/" + addressId)
-                .retrieve().bodyToMono(AddressResponse.class);
-
-        return addressResponse.block();
     }
 }
