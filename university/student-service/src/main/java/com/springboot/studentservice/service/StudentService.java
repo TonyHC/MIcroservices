@@ -4,8 +4,10 @@ import com.springboot.studentservice.entity.Student;
 import com.springboot.studentservice.repository.StudentRepository;
 import com.springboot.studentservice.request.CreateStudentRequest;
 import com.springboot.studentservice.response.StudentResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class StudentService {
     private final StudentRepository studentRepository;
@@ -33,6 +35,8 @@ public class StudentService {
     }
 
     public StudentResponse getStudentById(Long id) {
+        log.info("Inside getStudentById(): " + id);
+
         Student student = studentRepository.findById(id).get();
         StudentResponse studentResponse = new StudentResponse(student);
 
