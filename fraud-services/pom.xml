@@ -6,15 +6,20 @@
 
   <groupId>com.tonyhc</groupId>
   <artifactId>fraud-services</artifactId>
+  <packaging>pom</packaging>
   <version>1.0-SNAPSHOT</version>
+  <modules>
+    <module>customer</module>
+    <module>fraud</module>
+  </modules>
 
   <name>fraudservices</name>
   <url>https://github.com/TonyHC</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.7</maven.compiler.source>
-    <maven.compiler.target>1.7</maven.compiler.target>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
     <spring.boot.maven.plugin.version>2.7.2</spring.boot.maven.plugin.version>
     <spring.boot.dependencies.version>2.7.2</spring.boot.dependencies.version>
   </properties>
