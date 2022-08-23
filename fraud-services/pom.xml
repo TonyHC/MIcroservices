@@ -28,7 +28,6 @@
     <spring.boot.maven.plugin.version>2.7.3</spring.boot.maven.plugin.version>
     <spring.boot.dependencies.version>2.7.3</spring.boot.dependencies.version>
     <spring-cloud.version>2021.0.3</spring-cloud.version>
-    <jib.maven.plugin.version>3.2.1</jib.maven.plugin.version>
     <image>tchao98/${project.artifactId}:${project.version}</image>
   </properties>
 
@@ -84,7 +83,7 @@
         <plugin>
           <groupId>com.google.cloud.tools</groupId>
           <artifactId>jib-maven-plugin</artifactId>
-          <version>${jib.maven.plugin.version>}</version>
+          <version>3.2.1</version>
           <configuration>
             <from>
               <image>eclipse-temurin:17@sha256:461c26922a99d9c17db4d3c93ffb5483a1bd493eeddb5f759491faf60bfca202</image>
@@ -128,4 +127,5 @@
       </plugin>
     </plugins>
   </build>
+
 </project>
