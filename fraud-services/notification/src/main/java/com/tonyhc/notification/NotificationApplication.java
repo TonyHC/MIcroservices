@@ -1,23 +1,22 @@
 package com.tonyhc.notification;
 
-import com.tonyhc.ampq.RabbitMQMessageProducer;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
 @SpringBootApplication(
         scanBasePackages = {
                 "com.tonyhc.notification",
-                "com.tonyhc.ampq"
+                // "com.tonyhc.ampq",
+                "com.tonyhc.kafka"
         }
 )
 @EnableEurekaClient
 @PropertySources({
-        @PropertySource("classpath:clients-${spring.profiles.active}.properties")
+        @PropertySource("classpath:clients-${spring.profiles.active}.properties"),
+        @PropertySource("classpath:kafka-${spring.profiles.active}.properties")
 })
 public class NotificationApplication {
     public static void main( String[] args )

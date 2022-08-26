@@ -10,7 +10,8 @@ import org.springframework.context.annotation.PropertySources;
 @SpringBootApplication(
         scanBasePackages = {
                 "com.tonyhc.customer",
-                "com.tonyhc.ampq"
+                // "com.tonyhc.ampq",
+                "com.tonyhc.kafka"
         }
 )
 @EnableEurekaClient
@@ -18,7 +19,8 @@ import org.springframework.context.annotation.PropertySources;
         basePackages = "com.tonyhc.clients"
 )
 @PropertySources({
-        @PropertySource("classpath:clients-${spring.profiles.active}.properties")
+        @PropertySource("classpath:clients-${spring.profiles.active}.properties"),
+        @PropertySource("classpath:kafka-${spring.profiles.active}.properties")
 })
 public class CustomerApplication
 {

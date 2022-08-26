@@ -1,3 +1,4 @@
+/*
 package com.tonyhc.notification;
 
 import org.springframework.amqp.core.Binding;
@@ -48,3 +49,4 @@ public class NotificationConfig {
         return internalNotificationRoutingKey;
     }
 }
+*/
