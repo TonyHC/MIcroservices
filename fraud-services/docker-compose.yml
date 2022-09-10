@@ -3,10 +3,12 @@ services:
     container_name: postgres
     image: postgres
     environment:
+      POSTGRES_MULTIPLE_DATABASES: customer,fraud,notification
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: password
       PGDATA: /data/postgres
     volumes:
+      - ./docker/database:/docker-entrypoint-initdb.d
       - postgres:/data/postgres
     ports:
       - "5432:5432"
@@ -60,37 +62,37 @@ services:
       - 29092:29092
     networks:
       - spring
-#  rabbitmq:
-#    image: rabbitmq:3.9.22-management-alpine
-#    container_name: rabbitmq
-#    ports:
-#      - "5672:5672"
-#      - "15672:15672"
-#    networks:
-#      - spring
-#  eureka-server:
-#    image: tchao98/eureka-server:latest
-#    container_name: eureka-server
-#    ports:
-#      - "8761:8761"
-#    environment:
-#      - SPRING_PROFILES_ACTIVE=docker
-#    networks:
-#      - spring
-#    depends_on:
-#      - zipkin
-#  api-gateway:
-#    image: tchao98/api-gateway:latest
-#    container_name: api-gateway
-#    ports:
-#      - "8083:8083"
-#    environment:
-#      - SPRING_PROFILES_ACTIVE=docker
-#    networks:
-#      - spring
-#    depends_on:
-#      - zipkin
-#      - eureka-server
+  #  rabbitmq:
+  #    image: rabbitmq:3.9.22-management-alpine
+  #    container_name: rabbitmq
+  #    ports:
+  #      - "5672:5672"
+  #      - "15672:15672"
+  #    networks:
+  #      - spring
+  #  eureka-server:
+  #    image: tchao98/eureka-server:latest
+  #    container_name: eureka-server
+  #    ports:
+  #      - "8761:8761"
+  #    environment:
+  #      - SPRING_PROFILES_ACTIVE=docker
+  #    networks:
+  #      - spring
+  #    depends_on:
+  #      - zipkin
+  #  api-gateway:
+  #    image: tchao98/api-gateway:latest
+  #    container_name: api-gateway
+  #    ports:
+  #      - "8083:8083"
+  #    environment:
+  #      - SPRING_PROFILES_ACTIVE=docker
+  #    networks:
+  #      - spring
+  #    depends_on:
+  #      - zipkin
+  #      - eureka-server
   customer:
     image: tchao98/customer:latest
     container_name: customer
