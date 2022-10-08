@@ -1,7 +1,7 @@
 package com.tonyhc.service;
 
-import com.tonyhc.dto.UserDTO;
 import com.tonyhc.domain.User;
+import com.tonyhc.dto.UserDTO;
 import com.tonyhc.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -30,7 +30,6 @@ public class UserService {
         User user = modelMapper.map(userDetails, User.class);
         userRepository.save(user);
 
-        UserDTO userDTO = modelMapper.map(user, UserDTO.class);
-        return userDTO;
+        return modelMapper.map(user, UserDTO.class);
     }
 }
