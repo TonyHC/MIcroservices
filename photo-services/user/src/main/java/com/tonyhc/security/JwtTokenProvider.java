@@ -39,7 +39,6 @@ public class JwtTokenProvider {
                 .setExpiration(expirationDate)
                 .signWith(SignatureAlgorithm.HS512, TOKEN_SECRET)
                 .compact();
-
     }
 
     public boolean validateToken(String token) {
@@ -63,6 +62,6 @@ public class JwtTokenProvider {
 
     public String getUserIdFromToken(String token) {
         Claims claims = Jwts.parser().setSigningKey(TOKEN_SECRET).parseClaimsJws(token).getBody();
-       return (String) claims.get("id");
+        return (String) claims.get("id");
     }
 }
