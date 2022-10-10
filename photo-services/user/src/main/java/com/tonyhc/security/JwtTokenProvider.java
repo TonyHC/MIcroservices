@@ -3,6 +3,7 @@ package com.tonyhc.security;
 import com.tonyhc.dto.UserDTO;
 import com.tonyhc.service.CustomUserDetailsService;
 import io.jsonwebtoken.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
@@ -11,11 +12,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.tonyhc.security.SecurityConstants.EXPIRATION_TIME;
-import static com.tonyhc.security.SecurityConstants.TOKEN_SECRET;
-
 @Component
 public class JwtTokenProvider {
+    @Value("${token.secret}")
+    private String tokenSecret;
+
+    @Value("${expiration.time}")
+    private String expirationTime;
+
    private final CustomUserDetailsService customUserDetailsService;
 
     public JwtTokenProvider(CustomUserDetailsService customUserDetailsService) {
@@ -27,7 +31,7 @@ public class JwtTokenProvider {
         UserDTO userDetails = customUserDetailsService.getUserDetailsByEmail(username);
 
         Date currentDate = new Date(System.currentTimeMillis());
-        Date expirationDate = new Date(currentDate.getTime() + EXPIRATION_TIME);
+        Date expirationDate = new Date(currentDate.getTime() + Long.parseLong(expirationTime));
 
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", userDetails.getUserId());
@@ -37,13 +41,13 @@ public class JwtTokenProvider {
                 .setClaims(claims)
                 .setIssuedAt(currentDate)
                 .setExpiration(expirationDate)
-                .signWith(SignatureAlgorithm.HS512, TOKEN_SECRET)
+                .signWith(SignatureAlgorithm.HS512, tokenSecret)
                 .compact();
     }
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(TOKEN_SECRET).parseClaimsJws(token);
+            Jwts.parser().setSigningKey(tokenSecret).parseClaimsJws(token);
             return true;
         } catch (SignatureException signatureException) {
             System.out.println("Invalid JWT Signature");
@@ -61,7 +65,7 @@ public class JwtTokenProvider {
     }
 
     public String getUserIdFromToken(String token) {
-        Claims claims = Jwts.parser().setSigningKey(TOKEN_SECRET).parseClaimsJws(token).getBody();
+        Claims claims = Jwts.parser().setSigningKey(tokenSecret).parseClaimsJws(token).getBody();
         return (String) claims.get("id");
     }
 }

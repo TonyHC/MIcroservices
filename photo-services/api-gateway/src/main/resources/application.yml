@@ -12,6 +12,8 @@ spring:
           uri: http://user/
           predicates:
             - Path=/api/v1/users/**
+  config:
+    import: optional:configserver:http://localhost:8888
   main:
     web-application-type: reactive
 
@@ -28,11 +30,3 @@ eureka:
     hostname: localhost
     prefer-ip-address: true
 
-authorization:
-  token:
-    header:
-      name: Authorization
-      prefix: Bearer
-
-token:
-  secret: SecretKeyToGenerateJWTs
