@@ -2,6 +2,8 @@ spring:
   application:
     name: config-server
   cloud:
+    bus:
+      enabled: true
     config:
       server:
         git:
@@ -9,6 +11,18 @@ spring:
           username:
           password:
           clone-on-start: true
+  rabbitmq:
+    port: 5672
+    username: guest
+    password: guest
+    addresses: amqp://localhost:5672
 
 server:
   port: 8888
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - busrefresh

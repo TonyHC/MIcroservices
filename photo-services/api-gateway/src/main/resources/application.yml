@@ -16,6 +16,11 @@ spring:
     import: optional:configserver:http://localhost:8888
   main:
     web-application-type: reactive
+  rabbitmq:
+    addresses: amqp://localhost:5672
+    port: 5672
+    username: guest
+    password: guest
 
 server:
   port: 8082
@@ -29,4 +34,3 @@ eureka:
   instance:
     hostname: localhost
     prefer-ip-address: true
-

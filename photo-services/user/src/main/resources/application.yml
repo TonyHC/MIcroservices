@@ -20,6 +20,11 @@ spring:
       enabled: true
       settings:
         web-allow-others: true
+  rabbitmq:
+    addresses: amqp://localhost:5672
+    port: 5672
+    username: guest
+    password: guest
 
 server:
   port: 8080
