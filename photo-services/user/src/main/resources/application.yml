@@ -6,6 +6,9 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/user?serverTimezone=UTC
+  devtools:
+    restart:
+      enabled: true
   jpa:
     show-sql: true
     properties:
@@ -46,3 +49,7 @@ management:
           - health
           - metrics
           - mappings
+
+logging:
+  level:
+    com.tonyhc.clients.album.AlbumClient: DEBUG
