@@ -8,8 +8,8 @@ spring:
       server:
         git:
           uri: https://github.com/TonyHC/Photo-Services-Config-Server
-          username:
-          password:
+          username: TonyHC
+          password: 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
           clone-on-start: true
         native:
           search-locations: file:///${user.home}/Desktop/Microservices/others/photo-services-config-server-native-file-system-backend
@@ -30,3 +30,10 @@ management:
       exposure:
         include:
           - busrefresh
+
+encrypt:
+#  key: someRandomD1mmyK3y
+  key-store:
+    location: file:///${user.home}/Desktop/Microservices/others/apiEncryptionKey.jks
+    password: ul92lff8lop29
+    alias: apiEncryptionKey
