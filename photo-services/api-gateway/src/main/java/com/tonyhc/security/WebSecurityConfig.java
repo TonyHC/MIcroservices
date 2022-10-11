@@ -24,6 +24,8 @@ public class WebSecurityConfig {
                 .and()
                 .addFilterAt(authorizationFilter, SecurityWebFiltersOrder.AUTHENTICATION)
                 .authorizeExchange()
+                .pathMatchers("/actuator/*").permitAll()
+                .pathMatchers("/user/actuator/*").permitAll()
                 .pathMatchers("/user/h2-console/**").permitAll()
                 .pathMatchers(HttpMethod.POST,"/user/api/v1/users").permitAll()
                 .pathMatchers(HttpMethod.POST, "/user/api/v1/users/login").permitAll()
