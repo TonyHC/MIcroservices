@@ -10,7 +10,8 @@
     <module>user</module>
     <module>api-gateway</module>
     <module>config-server</module>
-      <module>album</module>
+    <module>album</module>
+    <module>clients</module>
   </modules>
 
   <name>photo-services</name>
@@ -51,6 +52,10 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-openfeign</artifactId>
     </dependency>
   </dependencies>
 
