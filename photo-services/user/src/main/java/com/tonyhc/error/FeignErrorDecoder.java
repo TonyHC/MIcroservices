@@ -15,11 +15,14 @@ public class FeignErrorDecoder implements ErrorDecoder {
     @Value("${album.exceptions.albums-not-found}")
     private String albumsNotFoundExceptionMessage;
 
+    @Value("${album.exceptions.albums-bad-request}")
+    private String albumsBadRequestExceptionMessage;
+
     @Override
     public Exception decode(String methodKey, Response response) {
         switch (response.status()) {
             case 400:
-                return new FeignException.BadRequest("", response.request(), response.request().body(), Collections.emptyMap());
+                return new FeignException.BadRequest(albumsBadRequestExceptionMessage, response.request(), response.request().body(), Collections.emptyMap());
             case 404:
                 if (methodKey.contains("getUserAlbums")) {
                     return new ResponseStatusException(HttpStatus.valueOf(response.status()), albumsNotFoundExceptionMessage);

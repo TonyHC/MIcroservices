@@ -5,6 +5,7 @@ import com.tonyhc.clients.album.AlbumResponse;
 import com.tonyhc.domain.User;
 import com.tonyhc.dto.UserDTO;
 import com.tonyhc.repository.UserRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -41,18 +42,29 @@ public class UserService {
         return modelMapper.map(user, UserDTO.class);
     }
 
+    @CircuitBreaker(name = "albumService-getUserByUserId", fallbackMethod = "fallbackGetUserByUserId")
     public UserDTO getUserByUserId(String userId) {
+        UserDTO userDTO = convertUserToUserDTO(userId);
+
+        List<AlbumResponse> albums = albumClient.getUserAlbums(userId);
+        userDTO.setAlbums(albums);
+
+        return userDTO;
+    }
+
+    public UserDTO fallbackGetUserByUserId(String userId, Throwable throwable) {
+        log.error("Error: " + throwable);
+
+        return convertUserToUserDTO(userId);
+    }
+
+    private UserDTO convertUserToUserDTO(String userId) {
         User user = userRepository.findByUserId(userId);
 
         if (user == null) {
             throw new UsernameNotFoundException("Invalid userId");
         }
 
-        UserDTO userDTO = new ModelMapper().map(user, UserDTO.class);
-
-        List<AlbumResponse> albums = albumClient.getUserAlbums(userId);
-        userDTO.setAlbums(albums);
-
-        return userDTO;
+        return new ModelMapper().map(user, UserDTO.class);
     }
 }

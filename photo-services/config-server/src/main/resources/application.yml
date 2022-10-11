@@ -9,7 +9,7 @@ spring:
         git:
           uri: https://github.com/TonyHC/Photo-Services-Config-Server
           username: TonyHC
-          password: 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
+          password:
           clone-on-start: true
         native:
           search-locations: file:///${user.home}/Desktop/Microservices/others/photo-services-config-server-native-file-system-backend

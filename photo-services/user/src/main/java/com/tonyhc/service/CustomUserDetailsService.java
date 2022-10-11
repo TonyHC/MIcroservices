@@ -31,17 +31,6 @@ public class CustomUserDetailsService implements UserDetailsService {
                 true, true, true, true, Collections.emptyList());
     }
 
-    public org.springframework.security.core.userdetails.User loadUserById(String userId) {
-        User user = userRepository.findByUserId(userId);
-
-        if (user == null) {
-            throw new UsernameNotFoundException("Invalid userId");
-        }
-
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
-                true, true, true, true, Collections.emptyList());
-    }
-
     public UserDTO getUserDetailsByEmail(String email) {
         User user = userRepository.findByEmail(email);
 

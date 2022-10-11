@@ -8,7 +8,6 @@ import com.tonyhc.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,19 +21,12 @@ import javax.validation.Valid;
 @RefreshScope
 @Slf4j
 public class UserController {
-    @Value("${dummy.secret}")
-    private String dummySecret;
-
     private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    @GetMapping()
-    public String getStatus() {
-        return "Good secret: " + dummySecret;
-    }
     @PostMapping(
             consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}
