@@ -3,7 +3,6 @@ package com.tonyhc.controllers;
 import com.tonyhc.clients.album.AlbumResponse;
 import com.tonyhc.domain.Album;
 import com.tonyhc.service.AlbumService;
-import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.http.MediaType;
@@ -18,7 +17,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1/albums")
-@Slf4j
 public class AlbumController {
     private final AlbumService albumService;
 
@@ -37,9 +35,7 @@ public class AlbumController {
         }
 
         Type listOfAlbumResponseType = new TypeToken<List<AlbumResponse>>(){}.getType();
-        List<AlbumResponse> albumResponses= new ModelMapper().map(albums, listOfAlbumResponseType);
-        log.info("Albums: " + albumResponses.size());
 
-        return albumResponses;
+        return new ModelMapper().map(albums, listOfAlbumResponseType);
     }
 }

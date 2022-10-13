@@ -5,7 +5,6 @@ import com.tonyhc.payload.CreateUserRequest;
 import com.tonyhc.payload.CreateUserResponse;
 import com.tonyhc.payload.UserDetailsResponse;
 import com.tonyhc.service.UserService;
-import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -19,7 +18,6 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping(value = "/api/v1/users")
 @RefreshScope
-@Slf4j
 public class UserController {
     private final UserService userService;
 
