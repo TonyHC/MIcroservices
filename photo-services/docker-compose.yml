@@ -1,0 +1,48 @@
+services:
+  mysql:
+    build: ./docker/database
+    container_name: mysql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_0900_ai_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - mysql:/var/lib/mysql
+    ports:
+      - "3308:3306"
+    expose:
+      - 3308
+    networks:
+      - mysql
+    restart: always
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin-mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    ports:
+      - "8089:80"
+    networks:
+      - mysql
+    depends_on:
+      - mysql
+    restart: always
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+  rabbitmq:
+    image: rabbitmq:3.9.22-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+networks:
+  mysql:
+    driver: bridge
+
+volumes:
+  mysql:
