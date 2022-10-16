@@ -33,15 +33,86 @@ services:
     container_name: zipkin
     ports:
       - "9411:9411"
+    networks:
+      - spring
   rabbitmq:
     image: rabbitmq:3.9.22-management-alpine
     container_name: rabbitmq
     ports:
       - "5672:5672"
       - "15672:15672"
+    networks:
+      - spring
+  config-server:
+    image: tchao98/photo-services-config-server:latest
+    container_name: config-server
+    ports:
+      - "8888:8888"
+    environment:
+      - SPRING_PROFILES_ACTIVE=native,docker
+    networks:
+      - spring
+    depends_on:
+      - rabbitmq
+  eureka-server:
+    image: tchao98/photo-services-eureka-server:latest
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - spring
+    depends_on:
+      - config-server
+  api-gateway:
+    image: tchao98/photo-services-api-gateway:latest
+    container_name: api-gateway
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - spring
+    depends_on:
+      - zipkin
+      - eureka-server
+      - config-server
+      - rabbitmq
+  user:
+    image: tchao98/photo-services-user:latest
+    container_name: user-service
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - mysql
+      - spring
+    depends_on:
+      - mysql
+      - zipkin
+      - rabbitmq
+      - config-server
+      - eureka-server
+  album:
+    image: tchao98/photo-services-album:latest
+    container_name: album-service
+    ports:
+      - "8084:8084"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - spring
+    depends_on:
+      - zipkin
+      - config-server
+      - eureka-server
 
 networks:
   mysql:
+    driver: bridge
+  spring:
     driver: bridge
 
 volumes:

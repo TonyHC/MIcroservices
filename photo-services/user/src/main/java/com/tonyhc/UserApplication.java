@@ -13,7 +13,7 @@ import org.springframework.context.annotation.PropertySources;
         basePackages = "com.tonyhc.clients"
 )
 @PropertySources({
-        @PropertySource("classpath:clients-default.properties")
+        @PropertySource("classpath:clients-${spring.profiles.active}.properties")
 })
 public class UserApplication
 {

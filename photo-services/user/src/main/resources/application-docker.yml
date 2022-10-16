@@ -1,0 +1,85 @@
+spring:
+  application:
+    name: user
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: config-server
+      fail-fast: true
+      retry:
+        initialInterval: 3000
+        multiplier: 1.5
+        maxInterval: 5000
+        maxAttempts: 10
+      profile: docker
+  config:
+    import: optional:configserver:http://config-server:8888
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://mysql:3306/users?serverTimezone=UTC
+  devtools:
+    restart:
+      enabled: true
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+    hibernate:
+      ddl-auto: update
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+  rabbitmq:
+    addresses: amqp://rabbitmq:5672
+    port: 5672
+    username: guest
+    password: guest
+  zipkin:
+    base-url: http://zipkin:9411
+
+server:
+  port: 8080
+
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+  instance:
+    hostname: eureka-server
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - metrics
+          - mappings
+  endpoint:
+    health:
+      show-details: always
+  health:
+    circuitbreakers:
+      enabled: true
+
+logging:
+  level:
+    com.tonyhc.clients.album.AlbumClient: DEBUG
+  file:
+    name: user.log
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      albumService-getUserByUserId.sliding-window-size: 10
+      albumService-getUserByUserId.failure-rate-threshold: 50
+      albumService-getUserByUserId.wait-duration-in-open-state: 30000
+      albumService-getUserByUserId.automatic-transition-from-open-to-half-open-enabled: true
+      albumService-getUserByUserId.permitted-number-of-calls-in-half-open-state: 5
+      albumService-getUserByUserId.allow-health-indicator-to-fail: true
+      albumService-getUserByUserId.register-health-indicator: true

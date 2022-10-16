@@ -1,0 +1,55 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: config-server
+      fail-fast: true
+      retry:
+        initialInterval: 3000
+        multiplier: 1.5
+        maxInterval: 5000
+        maxAttempts: 10
+      profile: docker
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: user
+          uri: http://user/
+          predicates:
+            - Path=/api/v1/users/**
+  config:
+    import: optional:configserver:http://config-server:8888
+  main:
+    web-application-type: reactive
+  rabbitmq:
+    addresses: amqp://rabbitmq:5672
+    port: 5672
+    username: guest
+    password: guest
+  zipkin:
+    base-url: http://zipkin:9411
+
+server:
+  port: 8082
+
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+  instance:
+    hostname: eureka-server
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - metrics
+          - mappings
