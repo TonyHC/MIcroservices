@@ -1,5 +1,6 @@
 package com.tonyhc.security;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,11 +11,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import static com.tonyhc.security.SecurityConstants.*;
-
 @Configuration
 @EnableWebSecurity
 public class SpringSecurityConfig {
+    @Value("${login.url}")
+    private String loginURL;
+
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationConfiguration authenticationConfiguration;
 
@@ -37,7 +39,7 @@ public class SpringSecurityConfig {
     public AuthenticationFilter authenticationFilter() throws Exception {
         AuthenticationFilter authenticationFilter =
                 new AuthenticationFilter(jwtTokenProvider, authenticationConfiguration.getAuthenticationManager());
-        authenticationFilter.setFilterProcessesUrl(LOGIN_URL);
+        authenticationFilter.setFilterProcessesUrl(loginURL);
         return authenticationFilter;
     }
 
@@ -47,8 +49,7 @@ public class SpringSecurityConfig {
         http.headers().frameOptions().sameOrigin()
                         .and()
                 .authorizeRequests()
-                .antMatchers(H2_URL).permitAll()
-                .antMatchers("/**").hasIpAddress(API_GATEWAY_URL)
+                .antMatchers("/api/v1/users/**").permitAll()
                 .and()
                 .addFilter(authenticationFilter());
 
