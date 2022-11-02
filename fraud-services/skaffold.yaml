@@ -1,0 +1,29 @@
+apiVersion: skaffold/v2beta29
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - ./k8s/minikube/bootstrap/kafka/*
+      - ./k8s/minikube/bootstrap/postgres/*
+      - ./k8s/minikube/bootstrap/rabbitmq/*
+      - ./k8s/minikube/bootstrap/zipkin/*
+      - ./k8s/minikube/bootstrap/zookeeper/*
+      - ./k8s/minikube/services/customer/*
+      - ./k8s/minikube/services/fraud/*
+      - ./k8s/minikube/services/notification/*
+build:
+  local:
+    push: false
+  artifacts:
+    - image: tchao98/customer
+      context: customer
+      jib:
+        project: com.tonyhc:customer
+    - image: tchao98/fraud
+      context: fraud
+      jib:
+        project: com.tonyhc:fraud
+    - image: tchao98/notification
+      context: notification
+      jib:
+        project: com.tonyhc:notification
