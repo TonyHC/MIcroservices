@@ -10,7 +10,7 @@ import org.springframework.context.annotation.PropertySources;
 @SpringBootApplication(
         scanBasePackages = {
                 "com.tonyhc.customer",
-                // "com.tonyhc.ampq",
+                "com.tonyhc.ampq",
                 "com.tonyhc.kafka"
         }
 )

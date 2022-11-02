@@ -1,4 +1,3 @@
-/*
 package com.tonyhc.notification.rabbitmq;
 
 import com.tonyhc.clients.notification.NotificationRequest;
@@ -20,4 +19,3 @@ public class NotificationConsumer {
         notificationService.send(notificationRequest);
     }
 }
-*/
