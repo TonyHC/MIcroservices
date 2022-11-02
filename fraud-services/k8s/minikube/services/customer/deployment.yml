@@ -15,7 +15,6 @@ spec:
       containers:
         - name: customer
           image: tchao98/customer:latest
-          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:
