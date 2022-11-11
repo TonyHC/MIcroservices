@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-notification-initdb-configmap
+data:
+  initdb.sql: |
+    CREATE DATABASE notification;

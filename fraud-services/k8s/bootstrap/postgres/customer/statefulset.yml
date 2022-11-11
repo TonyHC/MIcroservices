@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres-customer
+  labels:
+    app: postgres-customer
+spec:
+  serviceName: postgres-customer
+  replicas: 1
+  template:
+    metadata:
+      name: postgres-customer
+      labels:
+        app: postgres-customer
+    spec:
+      volumes:
+        - name: postgres-customer-initdb
+          configMap:
+            name: postgres-customer-initdb-configmap
+      containers:
+        - name: postgres-customer
+          image: postgres:14.5
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: postgres-customer-initdb
+              mountPath: /docker-entrypoint-initdb.d
+          envFrom:
+            - configMapRef:
+                name: postgres-customer-config
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: postgres-customer

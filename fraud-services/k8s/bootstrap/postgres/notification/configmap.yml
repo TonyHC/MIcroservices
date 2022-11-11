@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-notification-config
+data:
+  POSTGRES_DB: tonyhc
+  POSTGRES_USER: tonyhc
+  POSTGRES_PASSWORD: password

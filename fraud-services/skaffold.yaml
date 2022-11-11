@@ -3,14 +3,16 @@ kind: Config
 deploy:
   kubectl:
     manifests:
-      - ./k8s/minikube/bootstrap/kafka/*
-      - ./k8s/minikube/bootstrap/postgres/*
-      - ./k8s/minikube/bootstrap/rabbitmq/*
-      - ./k8s/minikube/bootstrap/zipkin/*
-      - ./k8s/minikube/bootstrap/zookeeper/*
-      - ./k8s/minikube/services/customer/*
-      - ./k8s/minikube/services/fraud/*
-      - ./k8s/minikube/services/notification/*
+      - ./k8s/bootstrap/kafka/*
+      - ./k8s/bootstrap/postgres/customer/*
+      - ./k8s/bootstrap/postgres/fraud/*
+      - ./k8s/bootstrap/postgres/notification/*
+      - ./k8s/bootstrap/rabbitmq/*
+      - ./k8s/bootstrap/zipkin/*
+      - ./k8s/bootstrap/zookeeper/*
+      - ./k8s/services/customer/*
+      - ./k8s/services/fraud/*
+      - ./k8s/services/notification/*
 build:
   local:
     push: false

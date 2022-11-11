@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-fraud-initdb-configmap
+data:
+  initdb.sql: |
+    CREATE DATABASE fraud;

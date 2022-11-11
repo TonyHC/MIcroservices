@@ -2,7 +2,7 @@ spring:
   application:
     name: fraud
   datasource:
-    url: jdbc:postgresql://postgres:5432/fraud
+    url: jdbc:postgresql://postgres-fraud:5432/fraud
     username: tonyhc
     password: password
   jpa:
