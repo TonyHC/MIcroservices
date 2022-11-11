@@ -1,7 +1,0 @@
-CREATE DATABASE customer;
-CREATE DATABASE fraud;
-CREATE DATABASE notification;
-
-GRANT ALL PRIVILEGES ON DATABASE customer to admin;
-GRANT ALL PRIVILEGES ON DATABASE fraud to admin;
-GRANT ALL PRIVILEGES ON DATABASE notification to admin;

@@ -1,0 +1,3 @@
+CREATE DATABASE fraud;
+
+GRANT ALL PRIVILEGES ON DATABASE fraud to admin;

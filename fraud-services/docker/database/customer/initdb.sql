@@ -1,0 +1,3 @@
+CREATE DATABASE customer;
+
+GRANT ALL PRIVILEGES ON DATABASE customer to admin;

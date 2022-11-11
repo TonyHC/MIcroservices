@@ -1,23 +1,59 @@
+version: '3.9'
+
+x-postgres-image:
+  &postgres-image
+  postgres:14.5
+
+x-postgres-env:
+  &postgres-env
+  POSTGRES_USER: admin
+  POSTGRES_PASSWORD: password
+  PGDATA: /data/postgres
+
+x-postgres-restart-policy:
+  &postgres-restart-policy
+  unless-stopped
+
 services:
-  postgres:
-    container_name: postgres
-    image: postgres
-    environment:
-      POSTGRES_MULTIPLE_DATABASES: customer,fraud,notification
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: password
-      PGDATA: /data/postgres
+  postgres-customer:
+    container_name: postgres-customer
+    image: *postgres-image
+    environment: *postgres-env
     volumes:
-      - ./docker/database:/docker-entrypoint-initdb.d
-      - postgres:/data/postgres
+      - ./docker/database/customer:/docker-entrypoint-initdb.d
+      - postgres-customer:/data/postgres
     ports:
       - "5432:5432"
     networks:
       - postgres
-    restart: unless-stopped
+    restart: *postgres-restart-policy
+  postgres-fraud:
+    container_name: postgres-fraud
+    image: *postgres-image
+    environment: *postgres-env
+    volumes:
+      - ./docker/database/fraud:/docker-entrypoint-initdb.d
+      - postgres-fraud:/data/postgres
+    ports:
+      - "5433:5432"
+    networks:
+      - postgres
+    restart: *postgres-restart-policy
+  postgres-notification:
+    container_name: postgres-notification
+    image: *postgres-image
+    environment: *postgres-env
+    volumes:
+      - ./docker/database/notification:/docker-entrypoint-initdb.d
+      - postgres-notification:/data/postgres
+    ports:
+      - "5434:5432"
+    networks:
+      - postgres
+    restart: *postgres-restart-policy
   pgadmin:
     container_name: pgadmin
-    image: dpage/pgadmin4
+    image: dpage/pgadmin4:6.15
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
@@ -30,7 +66,7 @@ services:
       - postgres
     restart: unless-stopped
   zipkin:
-    image: openzipkin/zipkin
+    image: openzipkin/zipkin:2.23
     container_name: zipkin
     ports:
       - "9411:9411"
@@ -38,7 +74,7 @@ services:
       - spring
   zookeeper:
     container_name: zookeeper
-    image: confluentinc/cp-zookeeper:latest
+    image: confluentinc/cp-zookeeper:5.4.10
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -48,7 +84,7 @@ services:
       - spring
   kafka:
     container_name: kafka
-    image: confluentinc/cp-kafka:latest
+    image: confluentinc/cp-kafka:5.4.10
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
@@ -62,14 +98,14 @@ services:
       - 29092:29092
     networks:
       - spring
-  #  rabbitmq:
-  #    image: rabbitmq:3.9.22-management-alpine
-  #    container_name: rabbitmq
-  #    ports:
-  #      - "5672:5672"
-  #      - "15672:15672"
-  #    networks:
-  #      - spring
+  rabbitmq:
+    image: rabbitmq:3.9.22-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - spring
   #  eureka-server:
   #    image: tchao98/eureka-server:latest
   #    container_name: eureka-server
@@ -105,7 +141,7 @@ services:
       - postgres
     depends_on:
       - zipkin
-      - postgres
+      - postgres-customer
       - kafka
   fraud:
     image: tchao98/fraud:latest
@@ -119,7 +155,7 @@ services:
       - postgres
     depends_on:
       - zipkin
-      - postgres
+      - postgres-fraud
       - kafka
   notification:
     image: tchao98/notification:latest
@@ -133,7 +169,7 @@ services:
       - postgres
     depends_on:
       - zipkin
-      - postgres
+      - postgres-notification
       - kafka
 
 networks:
@@ -143,5 +179,7 @@ networks:
     driver: bridge
 
 volumes:
-  postgres:
+  postgres-customer:
+  postgres-fraud:
+  postgres-notification:
   pgadmin:
