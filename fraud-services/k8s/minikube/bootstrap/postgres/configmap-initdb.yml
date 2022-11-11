@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: postgres-initdb-configmap
-data:
-  initdb.sql: |
-    CREATE DATABASE customer;
-    CREATE DATABASE fraud;
-    CREATE DATABASE notification;
